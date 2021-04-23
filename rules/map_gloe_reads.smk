@@ -22,3 +22,12 @@ rule map_reads:
     bowtie2 -q -x {input.bt_index}/hg19 -U {input.sample_reads} \
     -p {threads} -S {output}
     '''
+
+rule map_all_reads:
+    input:
+        expand('output/map_glow_reads/{sample}.sam', sample=SAMPLE_NAMES)
+    output:
+        'output/map_glow_reads/map_all_reads.done'
+    shell:'''
+    touch {output}
+    '''

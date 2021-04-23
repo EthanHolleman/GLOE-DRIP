@@ -1,22 +1,46 @@
+def group_replicates(samples):
+    all_samples = []
+    for _, sample in samples.iterrows():
+        modification = sample['modification']
+        replicates = samples.loc[samples['modification'] == modification]
+        replicates = tuple([rep['Sample Name'] for _, rep in replicates.iterrows()])
+        all_samples.append(replicates)
+    return all_samples
+
+
+REPLICATES = group_replicates(GLOE_SAMPLES)
 
 
 rule concatenate_gloe_replicates:
     input:
-        rep_a='',
-        rep_b=''
+        rep_a='output/process_alignment/{rep_a}.processed.direct.trimmed.sorted.bed',
+        rep_b='output/process_alignment/{rep_b}.processed.direct.trimmed.sorted.bed'
     output:     
-        'output/merged_gloe_replicates/{sample_a}_{sample_b}.bed'
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.bed'
     shell:'''
+    mkdir -p output/merged_gloe_replicates
     cat {input.rep_a} {input.rep_b} > {output}
     '''
 
 
 rule merge_gloe_replicates:
+    # strand specific merger 
     conda:
         '../envs/bedtools.yml'
     input:
-        'output/merged_gloe_replicates/{sample_a}_{sample_b}.bed'
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.bed'
     output:
-        'output/merged_gloe_replicates/{sample_a}_{sample_b}.bed'
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.bed'
     shell:'''
-    bedtools merge 
+    bedtools merge -s -i {input} > {output}
+    '''
+
+rule merge_all_gloe_replicates:
+    input:
+        expand(
+            'output/merged_gloe_replicates/{rep[0]}_{rep[1]}.merged.bed',
+            zip, REPLICATES
+            )
+    output:
+        'output/merged_gloe_replicates/merge_all_gloe_replicates.done'
+    
