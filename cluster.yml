@@ -1,6 +1,6 @@
 
 __default__:
-  partition: "high"
+  partition: "med"
   nodes: 1
   cpus: "{threads}"
   name: "{rule}.{wildcards}"
@@ -8,3 +8,13 @@ __default__:
   time: "4-0"
   email: 'etholleman@ucdavis.edu'
   mem: "8000"
+
+
+map_reads:
+  time: "8-0"
+  mem: "48000"
+
+
+trimmomatic:
+  time: "8-0"
+  mem: "48000"
