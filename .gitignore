@@ -8,7 +8,7 @@ output/
 slurm/
 
 # Logs
-
+logs/
 Logs/
 
 # slurm files
