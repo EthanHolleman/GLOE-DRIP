@@ -33,9 +33,32 @@ rule download_primer_file:
     -o {output}
     '''
 
+
 rule download_hg19_chr_sizes:
     output:
         'rawdata/hg19/hg19.chrom.sizes'
     shell:'''
     curl -L http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.chrom.sizes -o {output}
     '''
+
+
+rule download_drip_samples:
+    output:
+        'rawdata/DRIP/{sample}.bw'
+    params:
+        download_link = lambda wildcards: DRIP_SAMPLES[wildcards['sample']]['url']
+    shell:'''
+    mkdir -p rawdata/DRIP
+    curl -L {params.download_link} -o {output}
+    '''
+
+
+rule download_all_drip_samples:
+    input:
+        expand('rawdata/DRIP/{sample}.bw', sample=DRIP_SAMPLES['sample'])
+    output:
+        'rawdata/DRIP/download_all_drip.done'
+    shell:'''
+    touch {output}
+    '''
+
