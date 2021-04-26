@@ -1,3 +1,4 @@
+
 def group_replicates(samples):
     all_samples = []
     for _, sample in samples.iterrows():
@@ -35,11 +36,22 @@ rule merge_gloe_replicates:
     bedtools merge -s -i {input} > {output}
     '''
 
+
+rule sort_merged_gloe_replicates:
+    input:
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.bed'
+    output:
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.sorted.bed'
+    shell:'''
+    sort -k1,1n -k2,2n {input} > {output}
+    '''
+
+
 rule merge_all_gloe_replicates:
     input:
         expand(
-            'output/merged_gloe_replicates/{rep[0]}_{rep[1]}.merged.bed',
-            zip, REPLICATES
+            'output/merged_gloe_replicates/{rep[0]}_{rep[1]}.merged.sorted.bed',
+            zip, rep=REPLICATES
             )
     output:
         'output/merged_gloe_replicates/merge_all_gloe_replicates.done'
