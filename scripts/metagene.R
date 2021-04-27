@@ -57,7 +57,7 @@ main <- function(){
     mg.df <- mg$get_data_frame()
     print('got df')
     print(head(mg.df))
-    write.table(mg.df, paste(args.output_path, 'tsv', sep='.'))
+    write.table(mg.df, paste(output_path, 'tsv', sep='.'))
     plt <- plot_metagene(mg.df)
     ggsave(output_path, plt, dpi=500, height=10, width=12)
 }
