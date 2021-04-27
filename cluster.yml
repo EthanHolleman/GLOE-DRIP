@@ -9,12 +9,22 @@ __default__:
   email: 'etholleman@ucdavis.edu'
   mem: "8000"
 
-
 map_reads:
   time: "8-0"
   mem: "48000"
 
-
 trimmomatic:
   time: "8-0"
   mem: "48000"
+
+sort_bam:
+  mem: "16000"
+
+sort_bam_for_index:
+    mem: "16000"
+
+call_peaks_control_vs_treatment:
+    mem: "24000"
+  
+direct_mode:
+    mem: "62000"
