@@ -22,6 +22,9 @@ sort_bam:
 
 sort_bam_for_index:
     mem: "16000"
+  
+sort_concat_gloe_reps:
+  mem: "32000"
 
 call_peaks_control_vs_treatment:
     mem: "24000"
