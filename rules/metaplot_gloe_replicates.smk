@@ -41,6 +41,18 @@ rule index_bam:
     samtools index {input} {output}
     '''
 
+rule make_gloe_design_file:
+    input:
+        'samples/GLOE_samples.csv'
+    output:
+        'output/gloe_metaplots/design/gloe_design.tsv'
+    params:
+        out_dir = 'output/gloe_metaplots/design'
+    shell:'''
+    mkdir -p {params.out_dir}
+    python scripts/design.py {input} {output}
+    '''
+
 
 rule metagene_promotors_plot:
     conda:
@@ -51,13 +63,14 @@ rule metagene_promotors_plot:
             sample=SAMPLE_NAMES),
         indicies=expand(
             'output/gloe_metaplots/{sample}.processed.direct.sorted.bai',
-            sample=SAMPLE_NAMES)
+            sample=SAMPLE_NAMES),
+        design = 'output/gloe_metaplots/design/gloe_design.tsv'
     output:
         'output/gloe_metaplots/plots/promotor_metaplot.png'
     params:
         sample_names = lambda wildcards: list(SAMPLE_NAMES)
     shell:'''
-    Rscript scripts/metagene.R {output} {input.bam_files} {params.sample_names}
+    Rscript scripts/metagene.R {output} {input.design} {input.bam_files} {params.sample_names}
     '''
         
         

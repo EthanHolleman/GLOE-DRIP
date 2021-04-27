@@ -29,11 +29,11 @@ STRANDS = ['fwd', 'rev']
 
 rule seperate_forward_gloe_strands:
     input:
-        'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.sorted.bed'
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.sorted.bed'
     params:
         out_dir='output/call_gloe_peaks/strand'
     output:
-        fwd='output/call_gloe_peaks/strand/{rep_a}_{rep_b}.fwd.merged.sorted.bed'
+        fwd='output/call_gloe_peaks/strand/{rep_a}_{rep_b}.fwd.sorted.bed'
     shell:'''
     mkdir -p {params.out_dir}
     grep "+" {input} > {output.fwd}
@@ -42,11 +42,11 @@ rule seperate_forward_gloe_strands:
 
 rule seperate_reverse_gloe_strands:
     input:
-        'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.sorted.bed'
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.sorted.bed'
     params:
         out_dir='output/call_gloe_peaks/strand'
     output:
-        rev='output/call_gloe_peaks/strand/{rep_a}_{rep_b}.rev.merged.sorted.bed'
+        rev='output/call_gloe_peaks/strand/{rep_a}_{rep_b}.rev.sorted.bed'
     shell:'''
     mdkir {params.out_dir}
     grep "-" {input} > {output.rev}
@@ -57,8 +57,8 @@ rule call_peaks_treatment_as_treatment:
     conda:
         '../envs/macs2.yml'
     input:
-        treatment='output/call_gloe_peaks/strand/{treat_rep_a}_{treat_rep_b}.{strand}.merged.sorted.bed',
-        control='output/call_gloe_peaks/strand/{control_rep_a}_{control_rep_b}.{strand}.merged.sorted.bed'
+        treatment='output/call_gloe_peaks/strand/{treat_rep_a}_{treat_rep_b}.{strand}.sorted.bed',
+        control='output/call_gloe_peaks/strand/{control_rep_a}_{control_rep_b}.{strand}.sorted.bed'
     output:
         'output/call_gloe_peaks/TAT/treatment={treat_rep_a}_{treat_rep_b}.control={control_rep_a}_{control_rep_b}.{strand}._summits.bed'
     params:
@@ -76,8 +76,8 @@ rule call_peaks_control_vs_treatment:
     conda:
         '../envs/macs2.yml'
     input:
-        treatment='output/call_gloe_peaks/strand/{treat_rep_a}_{treat_rep_b}.{strand}.merged.sorted.bed',
-        control='output/call_gloe_peaks/strand/{control_rep_a}_{control_rep_b}.{strand}.merged.sorted.bed'
+        treatment='output/call_gloe_peaks/strand/{treat_rep_a}_{treat_rep_b}.{strand}.sorted.bed',
+        control='output/call_gloe_peaks/strand/{control_rep_a}_{control_rep_b}.{strand}.sorted.bed'
     output:
         'output/call_gloe_peaks/CAT/treatment={control_rep_a}_{control_rep_b}.control={treat_rep_a}_{treat_rep_b}.{strand}._summits.bed'
     params:

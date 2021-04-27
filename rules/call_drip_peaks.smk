@@ -16,5 +16,12 @@ rule call_drip_peaks:
     -m 5 -g 1.20E+07 --format BED --nomodel --shift 0
     '''
 
+rule call_all_drip_peaks:
+    input:
+        expand(
+            'output/call_drip_peaks/{sample}_{strand}/{sample}_{strand}_summits.bed',
+            sample
+        )
+
 
     
