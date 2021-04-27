@@ -47,21 +47,20 @@ rule metagene_promotors_plot:
         '../envs/R.yml'
     input:
         bam_files=expand(
-            'output/gloe_metaplots/{sample}.processed.direct.trimmed.sorted.bam',
+            'output/gloe_metaplots/{sample}.processed.direct.sorted.bam',
             sample=SAMPLE_NAMES),
         indicies=expand(
-            'output/gloe_metaplots/{sample}.processed.direct.trimmed.sorted.bai',
+            'output/gloe_metaplots/{sample}.processed.direct.sorted.bai',
             sample=SAMPLE_NAMES)
     output:
         'output/gloe_metaplots/plots/promotor_metaplot.png'
     params:
-        sample_names = SAMPLE_NAMES
+        sample_names = lambda wildcards: list(SAMPLE_NAMES)
     shell:'''
-    Rscript scripts/metaplot_gloe_replicates.R {output} {input.bam_files} {input.sample_names}
+    Rscript scripts/metagene.R {output} {input.bam_files} {params.sample_names}
     '''
         
         
-
 rule index_all_bams:
     input:
         expand('output/gloe_metaplots/{sample}.processed.direct.sorted.bai',
