@@ -8,4 +8,5 @@ dependencies:
   - r-base
   - r-ggplot2
   - r-ggpubr 
-  - r-tidyr 
+  - r-tidyr
+  - bioconductor-metagene
