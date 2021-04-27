@@ -10,3 +10,4 @@ dependencies:
   - r-ggpubr 
   - r-tidyr
   - bioconductor-metagene
+  - r-rcolorbrewer
