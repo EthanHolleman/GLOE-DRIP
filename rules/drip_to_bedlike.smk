@@ -19,9 +19,10 @@ rule bedgraph_to_bed:
     output:
         'output/DRIP_bedlike{sample_name}_{strand}.bed'
     params:
-        strand = lambda wildcards: '+' if wildcards['strand'] == 'fwd' else '-'
+        strand = lambda wildcards: '+' if wildcards['strand'] == 'fwd' else '-',
+        sample_name = lambda wildcards: wildcards['sample_name']
     shell:'''
-    awk '{{print $1 "\t" $2 "\t" $3 "\t" NR "_{sample}" "\t" $4 "\t" "{params.strand}"}}'
+    awk '{{print $1 "\t" $2 "\t" $3 "\t" NR "_{params.sample_name}" "\t" $4 "\t" "{params.strand}"}}' {input} > {output}
     '''
 
 
@@ -37,8 +38,8 @@ rule sort_DRIP_bedlike:
 
 rule all_drip_to_bedlike:
     input:
-        expand('output/DRIP_bedlike/{sample}_{strand}.sorted.bed', 
-        sample=DRIP_SAMPLES['sample'], strand=['fwd', 'rev']
+        expand('output/DRIP_bedlike/{sample}.sorted.bed', 
+        sample=DRIP_SAMPLES['sample']
         )
     output:
         'output/DRIP_bedlike/all_drip_to_bedlike.done'

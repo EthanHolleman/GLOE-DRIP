@@ -23,17 +23,27 @@ rule concatenate_gloe_replicates:
     cat {input.rep_a} {input.rep_b} > {output}
     '''
 
+rule sort_concat_gloe_reps:
+    input:
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.bed'
+    output:
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.sorted.bed'
+    shell:'''
+   sort -k 1,1 -k2,2n {input} > {output}
+    '''
+
 
 rule merge_gloe_replicates:
     # strand specific merger 
     conda:
         '../envs/bedtools.yml'
     input:
-        'output/merged_gloe_replicates/{rep_a}_{rep_b}.bed'
+        'output/merged_gloe_replicates/{rep_a}_{rep_b}.sorted.bed'
     output:
         'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.bed'
     shell:'''
-    bedtools merge -s -i {input} > {output}
+    mkdir -p output/merged_gloe_replicates
+    bedtools merge -s -c 5 -o average -i {input} > {output}
     '''
 
 
@@ -43,7 +53,7 @@ rule sort_merged_gloe_replicates:
     output:
         'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.sorted.bed'
     shell:'''
-    sort -k1,1n -k2,2n {input} > {output}
+    sort -k1,1 -k2,2n {input} > {output}
     '''
 
 

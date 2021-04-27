@@ -46,7 +46,7 @@ rule download_drip_samples:
     output:
         'rawdata/DRIP/{sample}.bw'
     params:
-        download_link = lambda wildcards: DRIP_SAMPLES[wildcards['sample']]['url']
+        download_link = lambda wildcards: DRIP_SAMPLES.loc[wildcards.sample]['url']
     shell:'''
     mkdir -p rawdata/DRIP
     curl -L {params.download_link} -o {output}
@@ -61,4 +61,8 @@ rule download_all_drip_samples:
     shell:'''
     touch {output}
     '''
+
+
+
+
 

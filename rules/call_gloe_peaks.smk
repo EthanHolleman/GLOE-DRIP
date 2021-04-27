@@ -31,7 +31,7 @@ rule seperate_forward_gloe_strands:
     input:
         'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.sorted.bed'
     params:
-        out_dir='output/call_gloe_peaks/strands'
+        out_dir='output/call_gloe_peaks/strand'
     output:
         fwd='output/call_gloe_peaks/strand/{rep_a}_{rep_b}.fwd.merged.sorted.bed'
     shell:'''
@@ -44,7 +44,7 @@ rule seperate_reverse_gloe_strands:
     input:
         'output/merged_gloe_replicates/{rep_a}_{rep_b}.merged.sorted.bed'
     params:
-        out_dir='output/call_gloe_peaks/strands'
+        out_dir='output/call_gloe_peaks/strand'
     output:
         rev='output/call_gloe_peaks/strand/{rep_a}_{rep_b}.rev.merged.sorted.bed'
     shell:'''
