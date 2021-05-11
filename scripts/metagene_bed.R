@@ -1,8 +1,10 @@
 library(metagene)
-data(promoters_hg19)
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 library(ggplot2)
 library(ggpubr)
 library(RColorBrewer)
+
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 
 
 
@@ -36,9 +38,10 @@ main <- function(){
     args <- commandArgs(trailingOnly=TRUE)
     output_path <- args[1]
     cores <- as.numeric(args[3])
-
+    bed_regions.path <- args[4]
+    #genes <- genes(txdb)
     args.length <- length(args)  # should be even first half is bam files second is names 
-    args.no_out <- args[4:length(args)]
+    args.no_out <- args[5:length(args)]
     midpoint <- length(args.no_out) / 2
 
     bam_files <- args.no_out[1:midpoint]
@@ -60,7 +63,7 @@ main <- function(){
     print(design_df)
     print('added design')
     print(bam_files)
-    mg <- metagene$new(regions=promoters_hg19, bam_files=bam_files, cores=cores)
+    mg <- metagene$new(regions=bed_regions.path, bam_files=bam_files, cores=cores)
     print('made metagene promotors')
     mg$produce_table(design=design_df)
     mg$produce_data_frame()
@@ -69,6 +72,7 @@ main <- function(){
     print(head(mg.df))
     write.table(mg.df, paste(output_path, 'tsv', sep='.'))
     plt <- plot_metagene(mg.df)
+    print(output_path)
     ggsave(output_path, plt, dpi=500, height=10, width=12)
 }
 

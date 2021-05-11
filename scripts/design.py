@@ -23,10 +23,12 @@ def read_sra(filepath, delim=',', **kwargs):
 
 def design_frame(sra_frame):
     groups = list(set(list(sra_frame['modification'])))
+    groups = [g.replace(' ', '_') for g in groups]
+    print(groups)
     group_matrix = {}
     for index, row in sra_frame.iterrows():
         sample_row = {g: 0 for g in groups}
-        sample_row[str(row['modification'])] = 1
+        sample_row[str(row['modification']).replace(' ','_')] = 1
         group_matrix[str(row['Sample Name'])] = sample_row
     return pd.DataFrame(group_matrix).transpose()
 
